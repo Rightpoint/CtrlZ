@@ -1,0 +1,11 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+target 'CtrlZ', :exclusive => true do
+  pod "CtrlZ", :path => "../"
+end
+
+target 'Tests', :exclusive => true do
+  pod "CtrlZ", :path => "../"
+
+  
+end
