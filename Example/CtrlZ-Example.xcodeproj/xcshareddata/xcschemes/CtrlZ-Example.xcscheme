@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6003F589195388D20070C39A"
-               BuildableName = "CtrlZ.app"
-               BlueprintName = "CtrlZ"
-               ReferencedContainer = "container:CtrlZ.xcodeproj">
+               BuildableName = "CtrlZ-Example.app"
+               BlueprintName = "CtrlZ-Example"
+               ReferencedContainer = "container:CtrlZ-Example.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "6003F5AD195388D20070C39A"
                BuildableName = "Tests.xctest"
                BlueprintName = "Tests"
-               ReferencedContainer = "container:CtrlZ.xcodeproj">
+               ReferencedContainer = "container:CtrlZ-Example.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "CtrlZ.app"
-            BlueprintName = "CtrlZ"
-            ReferencedContainer = "container:CtrlZ.xcodeproj">
+            BuildableName = "CtrlZ-Example.app"
+            BlueprintName = "CtrlZ-Example"
+            ReferencedContainer = "container:CtrlZ-Example.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "CtrlZ.app"
-            BlueprintName = "CtrlZ"
-            ReferencedContainer = "container:CtrlZ.xcodeproj">
+            BuildableName = "CtrlZ-Example.app"
+            BlueprintName = "CtrlZ-Example"
+            ReferencedContainer = "container:CtrlZ-Example.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6003F589195388D20070C39A"
-            BuildableName = "CtrlZ.app"
-            BlueprintName = "CtrlZ"
-            ReferencedContainer = "container:CtrlZ.xcodeproj">
+            BuildableName = "CtrlZ-Example.app"
+            BlueprintName = "CtrlZ-Example"
+            ReferencedContainer = "container:CtrlZ-Example.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

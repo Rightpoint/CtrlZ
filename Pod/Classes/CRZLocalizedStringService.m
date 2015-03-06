@@ -12,6 +12,8 @@
 #import "LocalizedString.h"
 #import "Translation.h"
 
+static NSString *const kCRZPodName = @"CtrlZ";
+
 static NSString *const kCTChangeableStringsGoogleSheetKey = @"1lkYaN3pf5FzAnBEJEh7kFIKGIpEHwUwU0YNDrgq4Vmw";
 
 static NSString *const kCRZLocalizedStringKey = @"key";
@@ -234,16 +236,21 @@ static NSString *const kCTChangeableStringsLiveTextKeyBase = @"gsx$livetext";
     }
 }
 
-#pragma mark - Core Data
-// Much of this code shamelessly copied from RZVinyl ( https://github.com/Raizlabs/RZVinyl )
+#pragma mark - Bundle Resources
 
-static NSString *const kCRZManagedObjectModelName = @"CtrlZ";
+- (NSBundle *)podBundle
+{
+    return [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:kCRZPodName withExtension:@"bundle"]];
+}
+
+#pragma mark - Core Data
+// Much of this code taken from RZVinyl ( https://github.com/Raizlabs/RZVinyl )
 
 - (NSURL *)storeURL
 {
     if (_storeURL == nil) {
         if ( [self.storeType isEqualToString:NSSQLiteStoreType] ) {
-            NSString *storeFileName = [kCRZManagedObjectModelName stringByAppendingPathExtension:@"sqlite"];
+            NSString *storeFileName = [kCRZPodName stringByAppendingPathExtension:@"sqlite"];
             NSURL    *libraryDir = [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] lastObject];
             _storeURL = [libraryDir URLByAppendingPathComponent:storeFileName];
         }
@@ -257,9 +264,9 @@ static NSString *const kCRZManagedObjectModelName = @"CtrlZ";
     // Create model
     //
     if ( self.managedObjectModel == nil ) {
-        self.managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:kCRZManagedObjectModelName withExtension:@"momd"]];
+        self.managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[[self podBundle] URLForResource:kCRZPodName withExtension:@"momd"]];
         if ( self.managedObjectModel == nil ) {
-            NSLog(@"Could not create managed object model for name %@", kCRZManagedObjectModelName);
+            NSLog(@"Could not create managed object model for name %@", kCRZPodName);
             return NO;
         }
     }

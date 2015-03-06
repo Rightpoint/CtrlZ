@@ -10,6 +10,9 @@
 
 @interface CRZViewController ()
 
+@property (weak, nonatomic) IBOutlet UILabel *welcomeLabel;
+@property (weak, nonatomic) IBOutlet UITextView *postTextView;
+
 @end
 
 @implementation CRZViewController
@@ -18,6 +21,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    self.welcomeLabel.text = CRZLocalizedString(@"Welcome!");
+    self.postTextView.text = CRZLocalizedString(@"Add a message here to post for all the world to see.");
 }
 
 - (void)didReceiveMemoryWarning
