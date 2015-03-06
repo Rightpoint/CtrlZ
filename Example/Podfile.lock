@@ -1,0 +1,14 @@
+PODS:
+  - CtrlZ (0.1.0)
+
+DEPENDENCIES:
+  - CtrlZ (from `../`)
+
+EXTERNAL SOURCES:
+  CtrlZ:
+    :path: ../
+
+SPEC CHECKSUMS:
+  CtrlZ: f1a00318f571824a8d407fb1870fcbe7a70c5e89
+
+COCOAPODS: 0.35.0
