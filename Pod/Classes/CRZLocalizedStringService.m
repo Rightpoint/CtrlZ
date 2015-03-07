@@ -9,7 +9,7 @@
 #import "CRZLocalizedStringService.h"
 
 // Data
-#import "LocalizedString.h"
+#import "LocalizedString+CRZExtensions.h"
 #import "Translation.h"
 
 static NSString *const kCRZPodName = @"CtrlZ";
@@ -23,6 +23,7 @@ static NSString *const kCRZTranslationValueKey = @"value";
 
 @interface CRZLocalizedStringService ()
 
+// Core Data
 @property (nonatomic, strong, readwrite) NSManagedObjectModel            *managedObjectModel;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext          *managedObjectContext;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
@@ -30,9 +31,6 @@ static NSString *const kCRZTranslationValueKey = @"value";
 @property (nonatomic, copy) NSString *modelConfiguration;
 @property (nonatomic, copy) NSString *storeType;
 @property (nonatomic, copy) NSURL    *storeURL;
-@property (nonatomic, strong) dispatch_queue_t backgroundContextQueue;
-
-@property (nonatomic, readonly, strong) NSDictionary *entityClassNamesToStalenessPredicates;
 
 @end
 
@@ -83,11 +81,10 @@ static NSString *const kCRZTranslationValueKey = @"value";
     return stringToDisplay;
 }
 
-- (void)updateStrings
+- (void)updateStringsFromUrl:(NSURL *)stringsURL
 {
-    NSURL *spreadsheetURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://spreadsheets.google.com/feeds/list/%@/1/public/full?alt=json", kCTChangeableStringsGoogleSheetKey]];
     
-    NSURLRequest *stringRequest = [NSURLRequest requestWithURL:spreadsheetURL];
+    NSURLRequest *stringRequest = [NSURLRequest requestWithURL:stringsURL];
     
     [NSURLConnection sendAsynchronousRequest:stringRequest queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if ( !connectionError ) {
@@ -131,37 +128,34 @@ static NSString *const kCRZTranslationValueKey = @"value";
         string = [newStrings firstObject];
     }
     
+    // Create new LocalizedString object if none found
+    if ( !string ) {
+        NSString *className = NSStringFromClass([LocalizedString class]);
+        NSString *entityName = nil;
+        for ( NSEntityDescription *entity in self.managedObjectModel.entities ) {
+            if ( [entity.managedObjectClassName isEqualToString:className] ) {
+                entityName = entity.name;
+                break;
+            }
+        }
+        string = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self.managedObjectContext];
+        string.key = key;
+    }
+    
     return string;
 }
 
 // TODO: Modify the following constant and method depending on data source
-static NSString *const kCTChangeableStringsLiveTextKeyBase = @"gsx$livetext";
+//static NSString *const kCTChangeableStringsLiveTextKeyBase = @"gsx$livetext";
 
 - (NSDictionary *)localizedStringsFromJSONData:(NSData *)data
 {
-    NSMutableDictionary *localizedStringsDict = [[NSMutableDictionary alloc] init];
+    NSDictionary *localizedStringsDict = [[NSDictionary alloc] init];
     
     NSError *error = nil;
-    id localizedStringsJSON = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-    if ( localizedStringsJSON != nil && [localizedStringsJSON isKindOfClass:[NSDictionary class]] ) {
-        for ( NSDictionary *entry in localizedStringsJSON[@"feed"][@"entry"] ) {
-//            NSLog(@"Entry: %@", entry);
-            
-            NSString *shippedText = entry[@"gsx$shippedtext"][@"$t"];
-            NSLog(@"Shipped text: %@", shippedText);
-            
-            NSString *currentLangID = [[NSLocale preferredLanguages] firstObject];
-            
-            // Default to english
-            NSString *newTextKey = [NSString stringWithFormat:@"%@%@", kCTChangeableStringsLiveTextKeyBase, currentLangID];
-            NSString *newText = entry[newTextKey][@"$t"];
-            NSLog(@"New text: %@", newText);
-            
-            // TODO: This should be populated with the translation for each language
-            NSDictionary *translationsDict = @{ currentLangID : newText };
-            
-            [localizedStringsDict setValue:translationsDict forKey:shippedText];
-        }
+    localizedStringsDict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if ( error ) {
+        NSLog(@"JSON Serialization failed with error: %@", error);
     }
     
     return localizedStringsDict;
@@ -169,70 +163,57 @@ static NSString *const kCTChangeableStringsLiveTextKeyBase = @"gsx$livetext";
 
 - (void)saveStringsDict:(NSDictionary *)stringsDict
 {
-    NSArray *stringKeys = [stringsDict allKeys];
-    
-    for ( NSString *stringKey in stringKeys ) {
-        
-        NSString *currentLangID = [[NSLocale preferredLanguages] firstObject];
-        NSString *newString = stringsDict[stringKey][currentLangID];
-        
-        if ( stringKey && newString && ![stringKey isEqualToString:newString] ) {
-            // TODO: why is localizedStringObjectForKey returning nil?
-            LocalizedString *stringToChange = [self localizedStringObjectForKey:stringKey];
-            Translation *translation = nil;
-            if ( !stringToChange ) {
-                // Create new LocalizedString object
-                NSString *className = NSStringFromClass([LocalizedString class]);
-                NSString *entityName = nil;
-                for ( NSEntityDescription *entity in self.managedObjectModel.entities ) {
-                    if ( [entity.managedObjectClassName isEqualToString:className] ) {
-                        entityName = entity.name;
-                        break;
-                    }
-                }
-                stringToChange = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self.managedObjectContext];
-                stringToChange.key = stringKey;
-            }
-            else {
-                // TODO: Add validation to make sure there is only one translation for the given language, and remove all but one if multiple are found
-                NSPredicate *translationForCurrentLanguagePredicate = [NSPredicate predicateWithFormat:@"%K MATCHES[c] %@", kCRZLanguageIDKey, currentLangID];
-                NSSet *translationsForCurrentLanguage = [stringToChange.translations filteredSetUsingPredicate:translationForCurrentLanguagePredicate];
-                if ( [translationsForCurrentLanguage count] > 1 ) {
-                    NSSortDescriptor *soonestFirst = [NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO];
-                    NSArray *sortedByDate = [[translationsForCurrentLanguage allObjects] sortedArrayUsingDescriptors:@[soonestFirst]];
-                    translation = [sortedByDate firstObject];
-                    [stringToChange removeTranslations:translationsForCurrentLanguage];
-                    [stringToChange addTranslationsObject:translation];
-                }
-                else {
-                    translation = [[translationsForCurrentLanguage allObjects] firstObject];
-                }
-            }
-            
-            if ( !translation ) {
-                // Create new Translation object
-                NSString *className = NSStringFromClass([Translation class]);
-                NSString *entityName = nil;
-                for ( NSEntityDescription *entity in self.managedObjectModel.entities ) {
-                    if ( [entity.managedObjectClassName isEqualToString:className] ) {
-                        entityName = entity.name;
-                        break;
-                    }
-                }
-                translation = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self.managedObjectContext];
-                translation.languageID = currentLangID;
-                [stringToChange addTranslationsObject:translation];
-            }
-            
-            translation.value = newString;
-            
-            NSError *error;
-            [self.managedObjectContext save:&error];
-            if ( error ) {
-                NSLog(@"Failed to save localized string with error: %@", error);
-            }
+    for ( id stringKey in stringsDict ) {
+        // Convert key to string
+        NSString *shippedText;
+        if ( [stringKey isKindOfClass:[NSString class]] ) {
+            shippedText = (NSString *)stringKey;
         }
         
+        if ( shippedText.length ) {
+            // Fetch saved string that matches key found in payload.
+            LocalizedString *savedString = [self localizedStringObjectForKey:shippedText];
+            
+            NSDictionary *translationsDict = [stringsDict objectForKey:stringKey];
+            
+            for ( id languageIdKey in translationsDict ) {
+                // Convert key to string
+                NSString *languageId;
+                if ( [languageIdKey isKindOfClass:[NSString class]] ) {
+                    languageId = (NSString *)languageIdKey;
+                }
+                
+                NSString *translatedString = [[stringsDict objectForKey:stringKey] objectForKey:languageIdKey];
+                
+                if ( translatedString.length && ![shippedText isEqualToString:translatedString] ) {
+                    // Fetch saved translation for current language ID
+                    Translation *savedTranslation = [savedString translationForLanguageKey:languageId];
+                    
+                    // Create a new Translation object if none was found
+                    if ( !savedTranslation ) {
+                        NSString *className = NSStringFromClass([Translation class]);
+                        NSString *entityName = nil;
+                        for ( NSEntityDescription *entity in self.managedObjectModel.entities ) {
+                            if ( [entity.managedObjectClassName isEqualToString:className] ) {
+                                entityName = entity.name;
+                                break;
+                            }
+                        }
+                        savedTranslation = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self.managedObjectContext];
+                        savedTranslation.languageID = languageId;
+                        [savedString addTranslationsObject:savedTranslation];
+                    }
+                    
+                    savedTranslation.value = translatedString;
+                    
+                    NSError *error;
+                    [self.managedObjectContext save:&error];
+                    if ( error ) {
+                        NSLog(@"Failed to save localized string with error: %@", error);
+                    }
+                }
+            }
+        }
     }
 }
 

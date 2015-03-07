@@ -16,6 +16,6 @@
 
 - (NSString *)stringForKey:(NSString *)key;
 
-- (void)updateStrings;
+- (void)updateStringsFromUrl:(NSURL *)stringsURL;
 
 @end

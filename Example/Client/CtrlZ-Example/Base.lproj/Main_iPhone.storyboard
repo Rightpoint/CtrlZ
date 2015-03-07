@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Iza-W2-zBa">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Welcome!-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="CRZViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
+                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DsO-3L-CdI">
+                                <rect key="frame" x="16" y="210" width="288" height="42"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="jav-lE-TWw"/>
+                                </constraints>
+                                <state key="normal" title="Post">
+                                    <color key="titleColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="IUw-8F-oMU" kind="push" id="ABX-vP-Nfz"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.49999999999999961" contentMode="scaleToFill" keyboardDismissMode="onDrag" text="Add a message here to post for all the world to see." translatesAutoresizingMaskIntoConstraints="NO" id="eW2-Db-4lA">
+                                <rect key="frame" x="16" y="72" width="288" height="130"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="130" id="0Jl-eB-cQO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="eW2-Db-4lA" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="6Sh-36-za5"/>
+                            <constraint firstItem="DsO-3L-CdI" firstAttribute="top" secondItem="eW2-Db-4lA" secondAttribute="bottom" constant="8" id="Fkk-N8-jan"/>
+                            <constraint firstItem="eW2-Db-4lA" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="U8r-KX-Ohc"/>
+                            <constraint firstItem="DsO-3L-CdI" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="ap3-S9-XLi"/>
+                            <constraint firstItem="DsO-3L-CdI" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="mAr-Jb-JEt"/>
+                            <constraint firstItem="eW2-Db-4lA" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" id="y4E-SQ-Oxh"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Welcome!" id="2oK-VZ-FnF"/>
+                    <connections>
+                        <outlet property="postButton" destination="DsO-3L-CdI" id="vnH-ba-dCD"/>
+                        <outlet property="postTextView" destination="eW2-Db-4lA" id="5xm-73-y1n"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="984" y="438"/>
+        </scene>
+        <!--Message PostedVC-->
+        <scene sceneID="32K-Wy-ahs">
+            <objects>
+                <viewController id="IUw-8F-oMU" customClass="CRZMessagePostedVC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vGT-ae-oKO"/>
+                        <viewControllerLayoutGuide type="bottom" id="bTH-di-FYy"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="atq-98-1lH">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message Posted." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qH8-Rj-vMP">
+                                <rect key="frame" x="16" y="236" width="288" height="29"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qH8-Rj-vMP" firstAttribute="leading" secondItem="atq-98-1lH" secondAttribute="leadingMargin" id="Jvb-LH-8yI"/>
+                            <constraint firstAttribute="centerY" secondItem="qH8-Rj-vMP" secondAttribute="centerY" constant="33.5" id="QDX-C8-T3W"/>
+                            <constraint firstItem="qH8-Rj-vMP" firstAttribute="trailing" secondItem="atq-98-1lH" secondAttribute="trailingMargin" id="umc-sH-wMs"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="opb-IR-63a"/>
+                    <connections>
+                        <outlet property="congratulationsLabel" destination="qH8-Rj-vMP" id="b0y-rt-6sE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="01k-Ee-kZi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1427" y="438"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="OS5-bB-AEA">
+            <objects>
+                <navigationController id="Iza-W2-zBa" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="A9B-zc-PID">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="hsL-we-6dR"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="g5N-Et-rQ6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="538" y="438"/>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
