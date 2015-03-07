@@ -1,38 +1,30 @@
-#
-# Be sure to run `pod lib lint CtrlZ.podspec' to ensure this is a
-# valid spec and remove all comments before submitting the spec.
-#
-# Any lines starting with a # are optional, but encouraged
-#
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = "CtrlZ"
   s.version          = "0.1.0"
-  s.summary          = "A short description of CtrlZ."
+  s.summary          = "Edit any string in your application after it has already shipped."
   s.description      = <<-DESC
-                       An optional longer description of CtrlZ
+
+                       Need to localize to a new language after your app has already shipped? Typo in your production app? Users saying they wish you added more superlatives??
+
+                       Simply replace NSLocalizedString with CRZLocalizedString and the power to do all of this will be yours.
+
+                       You set up an endpoint with a json file full of strings and your app will treat it like an extended .strings file.
 
                        * Markdown format.
                        * Don't worry about the indent, we strip it!
                        DESC
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/CtrlZ"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  s.homepage         = "https://github.com/Raizlabs/CtrlZ"
   s.license          = 'MIT'
   s.author           = { "Spencer Poff" => "spencer@raizlabs.com" }
-  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/CtrlZ.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.source           = { :git => "https://github.com/Raizlabs/CtrlZ.git", :tag => s.version.to_s }
 
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source_files = 'Pod/Classes/**/*'
+  s.source_files = 'Pod/Classes/*.{h,m}', 'Pod/Classes/Private/**/*.{h,m}'
   s.resource_bundles = {
-    'CtrlZ' => ['Pod/Assets/*.png', 'Pod/Assets/Data/*.xcdatamodeld']
+    'CtrlZ' => ['Pod/Assets/Data/*.xcdatamodeld']
   }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.public_header_files = 'Pod/Classes/*.h'
+  s.private_header_files = 'Pod/Classes/Private/**/*.h'
 end
