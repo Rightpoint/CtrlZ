@@ -8,7 +8,7 @@
 
 #import "CRZAppDelegate.h"
 
-static NSString *const kCRZStringsJsonUrl = @"http://192.168.1.239:8000/appStrings.json";
+static NSString *const kCRZHostAddress = @"10.0.0.9";
 
 @implementation CRZAppDelegate
 
@@ -16,7 +16,7 @@ static NSString *const kCRZStringsJsonUrl = @"http://192.168.1.239:8000/appStrin
 {
     // Override point for customization after application launch.
     
-    [[CRZLocalizedStringService sharedInstance] updateStringsFromUrl:[NSURL URLWithString:kCRZStringsJsonUrl]];
+    [self updateStrings];
     
     return YES;
 }
@@ -37,7 +37,7 @@ static NSString *const kCRZStringsJsonUrl = @"http://192.168.1.239:8000/appStrin
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     
-    [[CRZLocalizedStringService sharedInstance] updateStringsFromUrl:[NSURL URLWithString:kCRZStringsJsonUrl]];
+    [self updateStrings];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -48,6 +48,12 @@ static NSString *const kCRZStringsJsonUrl = @"http://192.168.1.239:8000/appStrin
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)updateStrings
+{
+    NSString *stringsJsonUrl = [NSString stringWithFormat:@"http://%@:8000/appStrings.json", kCRZHostAddress];
+    [[CRZLocalizedStringService sharedInstance] updateStringsFromUrl:[NSURL URLWithString:stringsJsonUrl]];
 }
 
 @end

@@ -18,14 +18,14 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
+		CB20C3EE1AAFF698001CCFE8 /* libPods-CtrlZ-Example-CtrlZ.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB20C3EC1AAFF698001CCFE8 /* libPods-CtrlZ-Example-CtrlZ.a */; };
+		CB20C3EF1AAFF698001CCFE8 /* libPods-CtrlZ-Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB20C3ED1AAFF698001CCFE8 /* libPods-CtrlZ-Example.a */; };
 		CBE6D21C1AAA565600CFFA51 /* CtrlZ-Example-Prefix.pch in Resources */ = {isa = PBXBuildFile; fileRef = 6003F59B195388D20070C39A /* CtrlZ-Example-Prefix.pch */; };
 		CBE6D21D1AAA568200CFFA51 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6003F59F195388D20070C39A /* Main_iPhone.storyboard */; };
 		CBE6D21E1AAA568200CFFA51 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A2195388D20070C39A /* Main_iPad.storyboard */; };
 		CBE6D2221AAA5B8800CFFA51 /* CRZViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBE6D2211AAA5B8800CFFA51 /* CRZViewController.m */; };
 		CBE6D2251AAA5BEB00CFFA51 /* CRZAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CBE6D2231AAA5BEB00CFFA51 /* CRZAppDelegate.m */; };
 		CBE6D2261AAA5BEB00CFFA51 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBE6D2241AAA5BEB00CFFA51 /* Images.xcassets */; };
-		CBE6D2321AAA78E200CFFA51 /* libPods-CtrlZ-Example-CtrlZ.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CBE6D2301AAA78E200CFFA51 /* libPods-CtrlZ-Example-CtrlZ.a */; };
-		CBE6D2331AAA78E200CFFA51 /* libPods-CtrlZ-Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CBE6D2311AAA78E200CFFA51 /* libPods-CtrlZ-Example.a */; };
 		CBE6D2361AAA7D1500CFFA51 /* CRZMessagePostedVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CBE6D2351AAA7D1500CFFA51 /* CRZMessagePostedVC.m */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +65,8 @@
 		7CEDFD1F2C75A338511815B3 /* Pods-CtrlZ.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CtrlZ.release.xcconfig"; path = "Pods/Target Support Files/Pods-CtrlZ/Pods-CtrlZ.release.xcconfig"; sourceTree = "<group>"; };
 		9A9F55A0149B825FE3113619 /* Pods-CtrlZ.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CtrlZ.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CtrlZ/Pods-CtrlZ.debug.xcconfig"; sourceTree = "<group>"; };
 		C2B8FEE8C407DE28AAC3CA15 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
+		CB20C3EC1AAFF698001CCFE8 /* libPods-CtrlZ-Example-CtrlZ.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-CtrlZ-Example-CtrlZ.a"; path = "Pods/build/Debug-iphoneos/libPods-CtrlZ-Example-CtrlZ.a"; sourceTree = "<group>"; };
+		CB20C3ED1AAFF698001CCFE8 /* libPods-CtrlZ-Example.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-CtrlZ-Example.a"; path = "Pods/build/Debug-iphoneos/libPods-CtrlZ-Example.a"; sourceTree = "<group>"; };
 		CB40ECE11AAA3B2700F01A37 /* libPods-CtrlZ-Example-CtrlZ.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-CtrlZ-Example-CtrlZ.a"; path = "Pods/build/Debug-iphoneos/libPods-CtrlZ-Example-CtrlZ.a"; sourceTree = "<group>"; };
 		CBE6D21F1AAA5B8800CFFA51 /* CRZAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRZAppDelegate.h; path = "CtrlZ-Example/CRZAppDelegate.h"; sourceTree = SOURCE_ROOT; };
 		CBE6D2201AAA5B8800CFFA51 /* CRZViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRZViewController.h; path = "CtrlZ-Example/CRZViewController.h"; sourceTree = SOURCE_ROOT; };
@@ -88,8 +90,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBE6D2321AAA78E200CFFA51 /* libPods-CtrlZ-Example-CtrlZ.a in Frameworks */,
-				CBE6D2331AAA78E200CFFA51 /* libPods-CtrlZ-Example.a in Frameworks */,
+				CB20C3EE1AAFF698001CCFE8 /* libPods-CtrlZ-Example-CtrlZ.a in Frameworks */,
+				CB20C3EF1AAFF698001CCFE8 /* libPods-CtrlZ-Example.a in Frameworks */,
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
@@ -134,6 +136,8 @@
 		6003F58C195388D20070C39A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CB20C3EC1AAFF698001CCFE8 /* libPods-CtrlZ-Example-CtrlZ.a */,
+				CB20C3ED1AAFF698001CCFE8 /* libPods-CtrlZ-Example.a */,
 				CBE6D2301AAA78E200CFFA51 /* libPods-CtrlZ-Example-CtrlZ.a */,
 				CBE6D2311AAA78E200CFFA51 /* libPods-CtrlZ-Example.a */,
 				CBE6D2291AAA63BC00CFFA51 /* libPods-CtrlZ-Example-CtrlZ.a */,

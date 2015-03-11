@@ -1,15 +1,15 @@
 # CtrlZ
 
-[![CI Status](http://img.shields.io/travis/spencer poff/CtrlZ.svg?style=flat)](https://travis-ci.org/spencer poff/CtrlZ)
+[![CI Status](http://img.shields.io/travis/Raizlabs/CtrlZ.svg?style=flat)](https://travis-ci.org/Raizlabs/CtrlZ)
 [![Version](https://img.shields.io/cocoapods/v/CtrlZ.svg?style=flat)](http://cocoadocs.org/docsets/CtrlZ)
 [![License](https://img.shields.io/cocoapods/l/CtrlZ.svg?style=flat)](http://cocoadocs.org/docsets/CtrlZ)
 [![Platform](https://img.shields.io/cocoapods/p/CtrlZ.svg?style=flat)](http://cocoadocs.org/docsets/CtrlZ)
 
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+To run the example project, clone the repo, and open Example/Client/CtrlZ-Example.xcworkspace.
 
-## Requirements
+To play around with changing the strings you will need to change kCRZHostAddress in CRZAppDelegate to your IP address. (To find your IP address, enter `ipconfig getifaddr en0` in Terminal.) After that, simply navigate to Example/Server/ in Terminal and enter `python -m SimpleHTTPServer`. You can now modify the strings in `appStrings.json` and watch them update in the example app.
 
 ## Installation
 
@@ -20,7 +20,7 @@ it, simply add the following line to your Podfile:
 
 ## Author
 
-spencer poff, spencer@raizlabs.com
+Spencer Poff, spencer@raizlabs.com
 
 ## License
 
