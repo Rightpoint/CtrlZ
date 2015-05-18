@@ -8,7 +8,7 @@
 
 #import "CRZAppDelegate.h"
 
-static NSString *const kCRZHostAddress = @"10.0.0.9";
+static NSString *const kCRZHostAddress = @"localhost";
 
 @implementation CRZAppDelegate
 
@@ -53,7 +53,7 @@ static NSString *const kCRZHostAddress = @"10.0.0.9";
 - (void)updateStrings
 {
     NSString *stringsJsonUrl = [NSString stringWithFormat:@"http://%@:8000/appStrings.json", kCRZHostAddress];
-    [[CRZLocalizedStringService sharedInstance] updateStringsFromUrl:[NSURL URLWithString:stringsJsonUrl]];
+    [CRZLocalizedStringService updateStringsFromUrl:[NSURL URLWithString:stringsJsonUrl]];
 }
 
 @end

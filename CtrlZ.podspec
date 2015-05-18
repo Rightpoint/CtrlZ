@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "CtrlZ"
-  s.version          = "0.1.0"
+  s.version          = "1.0.0"
   s.summary          = "Edit any string in your application after it has already shipped."
   s.description      = <<-DESC
 
@@ -22,9 +22,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/*.{h,m}', 'Pod/Classes/Private/**/*.{h,m}'
-  s.resource_bundles = {
-    'CtrlZ' => ['Pod/Assets/Data/*.xcdatamodeld']
-  }
   s.public_header_files = 'Pod/Classes/*.h'
   s.private_header_files = 'Pod/Classes/Private/**/*.h'
 end

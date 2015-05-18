@@ -8,30 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		1026455297C397E1E4A386A9 /* CRZLocalizedStringService.h in Headers */ = {isa = PBXBuildFile; fileRef = 0034DB9820CF5B7738D30B4E /* CRZLocalizedStringService.h */; };
-		434C18ABC10C37D212FF2A33 /* LocalizedString+CRZExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C050C26AC75AC84C3333D79 /* LocalizedString+CRZExtensions.h */; };
-		4D5922FD507B09777EEACD19 /* LocalizedString+CRZExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C050C26AC75AC84C3333D79 /* LocalizedString+CRZExtensions.h */; };
-		5CDD8419CBCD2A057BE9B89D /* Translation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7674681559E10B51EA8CF625 /* Translation.m */; };
+		5CDD8419CBCD2A057BE9B89D /* CRZTranslations.m in Sources */ = {isa = PBXBuildFile; fileRef = 7674681559E10B51EA8CF625 /* CRZTranslations.m */; };
 		66F8ECE0016D2F3DA6C17424 /* Pods-CtrlZ-Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A48F7F3E84185CEC362FE39A /* Pods-CtrlZ-Example-dummy.m */; };
 		6EBD40D558B7947E9327CB6C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 873BA754E517840C2B3AEBF3 /* Foundation.framework */; };
 		701704EE3FE0F557E9BCD906 /* Pods-CtrlZ-Example-CtrlZ-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AA8F37F1314400B1397883F /* Pods-CtrlZ-Example-CtrlZ-dummy.m */; };
-		730828C6BD5886D221D4A4C6 /* LocalizedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 721CB5B7406CE90AF0439675 /* LocalizedString.m */; };
 		82EFBDB2086CD58F6166CCA9 /* CRZLocalizedStringService.h in Headers */ = {isa = PBXBuildFile; fileRef = 0034DB9820CF5B7738D30B4E /* CRZLocalizedStringService.h */; };
 		88364D1593085BADD790C36D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 873BA754E517840C2B3AEBF3 /* Foundation.framework */; };
 		909CF9AE4EE8ED4D86BF4007 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 873BA754E517840C2B3AEBF3 /* Foundation.framework */; };
 		9223F86E4D34C70C9755FD18 /* Pods-Tests-CtrlZ-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 821BBDBCAA9B14767C57EF08 /* Pods-Tests-CtrlZ-dummy.m */; };
 		982D11628CFE906DA529D8A8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 873BA754E517840C2B3AEBF3 /* Foundation.framework */; };
-		98B5F340ACE6A4676E418A28 /* LocalizedString+CRZExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692FE97A71AD31C5A894988 /* LocalizedString+CRZExtensions.m */; };
 		A29F65C52AC95D206D75A382 /* CRZLocalizedStringService.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CB6F25E75749F2695C9092 /* CRZLocalizedStringService.m */; };
-		B473A54254A81FEEA369B95B /* LocalizedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 721CB5B7406CE90AF0439675 /* LocalizedString.m */; };
-		B97D694417B649ED1FD93B9F /* Translation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F40EC7A97485527A51ADCFD /* Translation.h */; };
-		BFC433270A47A658644D979A /* Translation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7674681559E10B51EA8CF625 /* Translation.m */; };
+		B97D694417B649ED1FD93B9F /* CRZTranslations.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F40EC7A97485527A51ADCFD /* CRZTranslations.h */; };
+		BFC433270A47A658644D979A /* CRZTranslations.m in Sources */ = {isa = PBXBuildFile; fileRef = 7674681559E10B51EA8CF625 /* CRZTranslations.m */; };
 		D87D8424172E76EE80363364 /* Pods-Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD97DB58057FA9124460B3FE /* Pods-Tests-dummy.m */; };
 		DC21548A94211B51B93516DE /* CRZLocalizedStringService.m in Sources */ = {isa = PBXBuildFile; fileRef = 93CB6F25E75749F2695C9092 /* CRZLocalizedStringService.m */; };
-		EDCF8BC4839EFF49D0E6FEDB /* LocalizedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 831D23CACD2D75658BF652B5 /* LocalizedString.h */; };
-		EF24E9C6C42F567AD33218ED /* CtrlZ.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 1B5C149601B0245774294EE6 /* CtrlZ.xcdatamodeld */; };
-		FA49C9378CA812BE915F08D2 /* LocalizedString+CRZExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0692FE97A71AD31C5A894988 /* LocalizedString+CRZExtensions.m */; };
-		FC5FC0035A52110A9BABFB70 /* LocalizedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 831D23CACD2D75658BF652B5 /* LocalizedString.h */; };
-		FF1BFFD463B50A957C903465 /* Translation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F40EC7A97485527A51ADCFD /* Translation.h */; };
+		FF1BFFD463B50A957C903465 /* CRZTranslations.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F40EC7A97485527A51ADCFD /* CRZTranslations.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,7 +58,6 @@
 
 /* Begin PBXFileReference section */
 		0034DB9820CF5B7738D30B4E /* CRZLocalizedStringService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CRZLocalizedStringService.h; path = Pod/Classes/CRZLocalizedStringService.h; sourceTree = "<group>"; };
-		0692FE97A71AD31C5A894988 /* LocalizedString+CRZExtensions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "LocalizedString+CRZExtensions.m"; path = "Pod/Classes/Private/Data/Extensions/LocalizedString+CRZExtensions.m"; sourceTree = "<group>"; };
 		0AA8F37F1314400B1397883F /* Pods-CtrlZ-Example-CtrlZ-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-CtrlZ-Example-CtrlZ-dummy.m"; sourceTree = "<group>"; };
 		10F6C9E285F4D23CC1090777 /* Pods-CtrlZ-Example-CtrlZ-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-CtrlZ-Example-CtrlZ-prefix.pch"; sourceTree = "<group>"; };
 		298AA12737EFD918F04DA6B6 /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -77,20 +67,16 @@
 		373B0C53D2E7A397520A7904 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		4288CD51AD0D46FFF3582825 /* Pods-CtrlZ-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-CtrlZ-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		4514E62B1C285F0D9D179935 /* Pods-Tests-CtrlZ-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-Tests-CtrlZ-prefix.pch"; path = "../Pods-Tests-CtrlZ/Pods-Tests-CtrlZ-prefix.pch"; sourceTree = "<group>"; };
-		4F40EC7A97485527A51ADCFD /* Translation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Translation.h; path = Pod/Classes/Private/Data/Translation.h; sourceTree = "<group>"; };
+		4F40EC7A97485527A51ADCFD /* CRZTranslations.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CRZTranslations.h; path = Pod/Classes/Private/Data/CRZTranslations.h; sourceTree = "<group>"; };
 		5066C307853FC4D2F25A5DB7 /* libPods-CtrlZ-Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CtrlZ-Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55BCFA3A158180BCED95CDB1 /* Pods-CtrlZ-Example-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-CtrlZ-Example-environment.h"; sourceTree = "<group>"; };
 		5A9E31911332D2A1F2ECF569 /* libPods-Tests-CtrlZ.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests-CtrlZ.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6856C0353F1DF0818C941C32 /* Pods-Tests-CtrlZ.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests-CtrlZ.xcconfig"; path = "../Pods-Tests-CtrlZ/Pods-Tests-CtrlZ.xcconfig"; sourceTree = "<group>"; };
-		721CB5B7406CE90AF0439675 /* LocalizedString.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LocalizedString.m; path = Pod/Classes/Private/Data/LocalizedString.m; sourceTree = "<group>"; };
-		7674681559E10B51EA8CF625 /* Translation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Translation.m; path = Pod/Classes/Private/Data/Translation.m; sourceTree = "<group>"; };
+		7674681559E10B51EA8CF625 /* CRZTranslations.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = CRZTranslations.m; path = Pod/Classes/Private/Data/CRZTranslations.m; sourceTree = "<group>"; };
 		7762B0E2884D0D014AF8845B /* Pods-CtrlZ-Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-CtrlZ-Example-resources.sh"; sourceTree = "<group>"; };
 		821BBDBCAA9B14767C57EF08 /* Pods-Tests-CtrlZ-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "Pods-Tests-CtrlZ-dummy.m"; path = "../Pods-Tests-CtrlZ/Pods-Tests-CtrlZ-dummy.m"; sourceTree = "<group>"; };
-		831D23CACD2D75658BF652B5 /* LocalizedString.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LocalizedString.h; path = Pod/Classes/Private/Data/LocalizedString.h; sourceTree = "<group>"; };
 		873BA754E517840C2B3AEBF3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		8A60CB656E5DEDB7E80ECDD7 /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		8BDCA73714953E05CC4F28B7 /* CtrlZ.xcdatamodel */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcdatamodel; path = CtrlZ.xcdatamodel; sourceTree = "<group>"; };
-		8C050C26AC75AC84C3333D79 /* LocalizedString+CRZExtensions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "LocalizedString+CRZExtensions.h"; path = "Pod/Classes/Private/Data/Extensions/LocalizedString+CRZExtensions.h"; sourceTree = "<group>"; };
 		93CB6F25E75749F2695C9092 /* CRZLocalizedStringService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = CRZLocalizedStringService.m; path = Pod/Classes/CRZLocalizedStringService.m; sourceTree = "<group>"; };
 		A48F7F3E84185CEC362FE39A /* Pods-CtrlZ-Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-CtrlZ-Example-dummy.m"; sourceTree = "<group>"; };
 		AAF40A95479E8EB49A2CD3A9 /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -173,13 +159,8 @@
 			children = (
 				0034DB9820CF5B7738D30B4E /* CRZLocalizedStringService.h */,
 				93CB6F25E75749F2695C9092 /* CRZLocalizedStringService.m */,
-				831D23CACD2D75658BF652B5 /* LocalizedString.h */,
-				721CB5B7406CE90AF0439675 /* LocalizedString.m */,
-				8C050C26AC75AC84C3333D79 /* LocalizedString+CRZExtensions.h */,
-				0692FE97A71AD31C5A894988 /* LocalizedString+CRZExtensions.m */,
-				4F40EC7A97485527A51ADCFD /* Translation.h */,
-				7674681559E10B51EA8CF625 /* Translation.m */,
-				F9135A2B5B293B567D2ECF17 /* Resources */,
+				4F40EC7A97485527A51ADCFD /* CRZTranslations.h */,
+				7674681559E10B51EA8CF625 /* CRZTranslations.m */,
 				5867BFDEBAE9AE0C03F91918 /* Support Files */,
 			);
 			name = CtrlZ;
@@ -269,14 +250,6 @@
 			path = "Target Support Files/Pods-CtrlZ-Example";
 			sourceTree = "<group>";
 		};
-		F9135A2B5B293B567D2ECF17 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				1B5C149601B0245774294EE6 /* CtrlZ.xcdatamodeld */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -285,9 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1026455297C397E1E4A386A9 /* CRZLocalizedStringService.h in Headers */,
-				4D5922FD507B09777EEACD19 /* LocalizedString+CRZExtensions.h in Headers */,
-				FC5FC0035A52110A9BABFB70 /* LocalizedString.h in Headers */,
-				B97D694417B649ED1FD93B9F /* Translation.h in Headers */,
+				B97D694417B649ED1FD93B9F /* CRZTranslations.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,9 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				82EFBDB2086CD58F6166CCA9 /* CRZLocalizedStringService.h in Headers */,
-				434C18ABC10C37D212FF2A33 /* LocalizedString+CRZExtensions.h in Headers */,
-				EDCF8BC4839EFF49D0E6FEDB /* LocalizedString.h in Headers */,
-				FF1BFFD463B50A957C903465 /* Translation.h in Headers */,
+				FF1BFFD463B50A957C903465 /* CRZTranslations.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,7 +395,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF24E9C6C42F567AD33218ED /* CtrlZ.xcdatamodeld in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,10 +429,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC21548A94211B51B93516DE /* CRZLocalizedStringService.m in Sources */,
-				98B5F340ACE6A4676E418A28 /* LocalizedString+CRZExtensions.m in Sources */,
-				B473A54254A81FEEA369B95B /* LocalizedString.m in Sources */,
 				9223F86E4D34C70C9755FD18 /* Pods-Tests-CtrlZ-dummy.m in Sources */,
-				5CDD8419CBCD2A057BE9B89D /* Translation.m in Sources */,
+				5CDD8419CBCD2A057BE9B89D /* CRZTranslations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,10 +439,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A29F65C52AC95D206D75A382 /* CRZLocalizedStringService.m in Sources */,
-				FA49C9378CA812BE915F08D2 /* LocalizedString+CRZExtensions.m in Sources */,
-				730828C6BD5886D221D4A4C6 /* LocalizedString.m in Sources */,
 				701704EE3FE0F557E9BCD906 /* Pods-CtrlZ-Example-CtrlZ-dummy.m in Sources */,
-				BFC433270A47A658644D979A /* Translation.m in Sources */,
+				BFC433270A47A658644D979A /* CRZTranslations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -875,20 +839,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		1B5C149601B0245774294EE6 /* CtrlZ.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				8BDCA73714953E05CC4F28B7 /* CtrlZ.xcdatamodel */,
-			);
-			currentVersion = 8BDCA73714953E05CC4F28B7 /* CtrlZ.xcdatamodel */;
-			name = CtrlZ.xcdatamodeld;
-			path = Pod/Assets/Data/CtrlZ.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 63525A7F4FE4617DFB07567A /* Project object */;
 }

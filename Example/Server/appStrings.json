@@ -1,17 +1,17 @@
 {
-	"Welcome!" : {
-		"en" : "Welcome!",
-		"es" : "Bienvenidos!"
-	},
-	"Add a message here to post for all the world to see." : {
-		"en" : "Add a message here to post for all the world to see.",
-		"es" : "Añadir un mensaje aqui para enviar por todo el mundo lo vea."
-	},
-	"Post" : {
-		"en" : "Post",
-		"es" : "Publicar"
-	},
-	"Message Posted." : {
-		"es" : "Mensaje publicado."
+	"lastUpdatedTimestamp" : 1425684758,
+	"translations" : {
+		"en" : {
+			"Welcome!" : "Welcome!",
+			"Add a message here to post for all the world to see." : "Add a message here to post for all the world to see.",
+			"Post" : "Post",
+			"Message Posted." : "Message Posted."
+		},
+		"es" : {
+			"Welcome!" : "Bienvenidos!",
+			"Add a message here to post for all the world to see." : "Añadir un mensaje aqui para enviar por todo el mundo lo vea.",
+			"Post" : "Publicar",
+			"Message Posted." : "Mensaje publicado."
+		}
 	}
 }

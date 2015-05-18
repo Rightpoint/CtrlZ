@@ -9,310 +9,246 @@
 #import "CRZLocalizedStringService.h"
 
 // Data
-#import "LocalizedString+CRZExtensions.h"
-#import "Translation.h"
+#import "CRZTranslations.h"
 
-static NSString *const kCRZPodName = @"CtrlZ";
+static NSString *const kCRZUserDefaultsLastUpdatedTimestampKey = @"CRZTranslationsLastUpdatedTimestamp";
 
-static NSString *const kCTChangeableStringsGoogleSheetKey = @"1lkYaN3pf5FzAnBEJEh7kFIKGIpEHwUwU0YNDrgq4Vmw";
-
-static NSString *const kCRZLocalizedStringKey = @"key";
-static NSString *const kCRZTranslationsKey = @"translations";
-static NSString *const kCRZLanguageIDKey = @"languageID";
-static NSString *const kCRZTranslationValueKey = @"value";
-
-@interface CRZLocalizedStringService ()
-
-// Core Data
-@property (nonatomic, strong, readwrite) NSManagedObjectModel            *managedObjectModel;
-@property (nonatomic, strong, readwrite) NSManagedObjectContext          *managedObjectContext;
-@property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator    *persistentStoreCoordinator;
-
-@property (nonatomic, copy) NSString *modelConfiguration;
-@property (nonatomic, copy) NSString *storeType;
-@property (nonatomic, copy) NSURL    *storeURL;
-
-@end
+static NSString *const kCRZPayloadLastUpdatedTimestampKey   = @"lastUpdatedTimestamp";
+static NSString *const kCRZPayloadTranslationsKey           = @"translations";
 
 @implementation CRZLocalizedStringService
 
-+ (CRZLocalizedStringService *)sharedInstance
-{
-    static CRZLocalizedStringService *crzService = nil;
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        crzService = [[CRZLocalizedStringService alloc] init];
-    });
-    
-    return crzService;
-}
+#pragma mark - Public
 
-- (instancetype)init
++ (NSString *)stringForKey:(NSString *)key
 {
-    self = [super init];
+    // Default to localized string baked into the bundle
+    NSString *stringToDisplay = [[NSBundle mainBundle] localizedStringForKey:key value:nil table:nil];
     
-    if ( self ) {
-        self.storeType = NSSQLiteStoreType;
-        [self buildCoreDataStack];
+    
+    NSString *crzLocalizedString = [CRZLocalizedStringService localizedStringForKey:key];
+    if ( crzLocalizedString.length ) {
+        stringToDisplay = crzLocalizedString;
     }
     
-    return self;
-}
-
-- (NSString *)stringForKey:(NSString *)key
-{
-    NSString *stringToDisplay = key;
-    
-    LocalizedString *localizedString = [self localizedStringObjectForKey:key];
-    
-    if ( localizedString ) {
-        NSString *langKey = [[NSLocale preferredLanguages] firstObject];
-        NSPredicate *currentTranslationPredicate = [NSPredicate predicateWithFormat:@"%K MATCHES[c] %@", kCRZLanguageIDKey, langKey];
-        NSArray *translations = [[localizedString.translations filteredSetUsingPredicate:currentTranslationPredicate] allObjects];
-        if ( [translations count] ) {
-            Translation *translation = [translations firstObject];
-            stringToDisplay = translation.value;
-        }
-    }
-    else {
-        stringToDisplay = NSLocalizedString(key, nil);
-    }
     return stringToDisplay;
 }
 
-- (void)updateStringsFromUrl:(NSURL *)stringsURL
++ (void)updateStringsFromUrl:(NSURL *)stringsURL
 {
-    
-    NSURLRequest *stringRequest = [NSURLRequest requestWithURL:stringsURL];
+    NSURLRequest *stringRequest = [NSURLRequest requestWithURL:stringsURL cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
     
     [NSURLConnection sendAsynchronousRequest:stringRequest queue:[[NSOperationQueue alloc] init] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        if ( !connectionError ) {
-            NSDictionary *stringsDict = [self localizedStringsFromJSONData:data];
-            [self performSelectorOnMainThread:@selector(saveStringsDict:) withObject:stringsDict waitUntilDone:YES];
+        if ( !connectionError && data ) {
+            NSError *serializationError = nil;
+            id serializedJSONData = [NSJSONSerialization JSONObjectWithData:data options:0 error:&serializationError];
+            
+            if ( !connectionError && !serializationError && [CRZLocalizedStringService shouldSaveJSONObject:serializedJSONData] ) {
+                NSArray *translationsArray = [CRZLocalizedStringService translationsArrayFromJSONObject:serializedJSONData];
+                
+                // TODO: Save translations for current language in memory for speed
+                
+                [CRZLocalizedStringService clearExistingTranslations];
+                
+                for ( CRZTranslations *translationsObject in translationsArray ) {
+                    BOOL savedSuccessfully = [CRZLocalizedStringService saveTranslationsObject:translationsObject];
+                    
+                    if ( savedSuccessfully ) {
+                        NSInteger lastUpdatedTimestamp = [CRZLocalizedStringService lastUpdatedTimestampFromJSONObject:serializedJSONData];
+                        
+                        if ( lastUpdatedTimestamp > 0 ) {
+                            [CRZLocalizedStringService saveExistingTranslationsLastUpdatedTimestamp:lastUpdatedTimestamp];
+                        }
+                    }
+                }
+            }
+            else if ( serializationError ) {
+                NSLog(@"CtrlZ - ERROR - JSON Serialization failed with error: %@", serializationError); // TODO: Throw real errors
+            }
+        }
+        else {
+            NSLog(@"CtrlZ - ERROR - Translations download failed with error: %@", connectionError);
         }
     }];
 }
 
-- (LocalizedString *)localizedStringObjectForKey:(NSString *)key
+#pragma mark - Accessing
+
++ (NSString *)localizedStringForKey:(NSString *)key
 {
-    LocalizedString *string = nil;
+    return [self localizedStringForKey:key withLanguageID:nil];
+}
+
++ (NSString *)localizedStringForKey:(NSString *)key withLanguageID:(NSString *)languageID
+{
+    if ( !languageID.length ) {
+        languageID = [[[NSBundle mainBundle] preferredLocalizations] firstObject];
+    }
     
-    // Create predicate
-    NSPredicate *stringWithKeyPredicate = [NSPredicate predicateWithFormat:@"%K MATCHES[c] %@", kCRZLocalizedStringKey, key];
+    NSDictionary *languageSpecificTranslationsDict = [self translationsDictForLanguageID:languageID];
     
-    // Find entity name
-    NSString *className = NSStringFromClass([LocalizedString class]);
-    NSString *entityName = nil;
-    for ( NSEntityDescription *entity in self.managedObjectModel.entities ) {
-        if ( [entity.managedObjectClassName isEqualToString:className] ) {
-            entityName = entity.name;
-            break;
+    return [languageSpecificTranslationsDict objectForKey:key];
+}
+
++ (NSDictionary *)translationsDictForLanguageID:(NSString *)languageID
+{
+    NSString *translationsPlistPath = [self translationsFilePathForLanguageID:languageID];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ( ![fileManager fileExistsAtPath:translationsPlistPath] ) {
+        return nil;
+    }
+    
+    return [NSDictionary dictionaryWithContentsOfFile:translationsPlistPath];
+}
+
+#pragma mark - Saving
+
++ (BOOL)shouldSaveJSONObject:(id)JSONObject
+{
+    BOOL shouldSave = NO;
+    
+    if ( [JSONObject isKindOfClass:[NSDictionary class]] ) {
+        NSNumber *payloadLastUpdatedTimestamp = [(NSDictionary *)JSONObject objectForKey:kCRZPayloadLastUpdatedTimestampKey];
+        
+        if ( payloadLastUpdatedTimestamp.integerValue > [CRZLocalizedStringService existingTranslationsLastUpdatedTimestamp] ) {
+            shouldSave = YES;
         }
     }
     
-    // Create fetch request
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
-    fetchRequest.entity = entity;
-    fetchRequest.predicate = stringWithKeyPredicate;
+    return shouldSave;
+}
+
++ (NSArray *)translationsArrayFromJSONObject:(id)JSONObject
+{
+    NSArray *translationsArray = nil;
     
-    // Execute fetch request
-    NSError *error = nil;
-    NSArray *newStrings = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    if ( error ) {
-        NSLog(@"Error performing fetch: %@", error);
+    if ( [JSONObject isKindOfClass:[NSDictionary class]] ) {
+        NSDictionary *dictOfTranslationsDicts = [(NSDictionary *)JSONObject objectForKey:kCRZPayloadTranslationsKey];
+        NSMutableArray *mutableTranslationsArray = [[NSMutableArray alloc] init];
+        
+        for ( NSString *langIDKey in dictOfTranslationsDicts ) {
+            CRZTranslations *translationsObject = [[CRZTranslations alloc] init];
+            translationsObject.languageID = langIDKey;
+            translationsObject.translationsDictionary = (NSDictionary *)dictOfTranslationsDicts[langIDKey];
+            
+            [mutableTranslationsArray addObject:translationsObject];
+        }
+        
+        translationsArray = mutableTranslationsArray;
+    }
+    else {
+        NSLog(@"CtrlZ - ERROR - Expected dictionary from JSON object, unknown data structure found.");
     }
     
-    if ( [newStrings count] ) {
-        string = [newStrings firstObject];
+    return translationsArray;
+}
+
++ (NSInteger)lastUpdatedTimestampFromJSONObject:(id)JSONObject
+{
+    NSInteger lastUpdatedTimestamp = -1;
+    
+    if ( [JSONObject isKindOfClass:[NSDictionary class]] ) {
+        NSNumber *lastUpdatedTimestampObject = [(NSDictionary *)JSONObject objectForKey:kCRZPayloadLastUpdatedTimestampKey];
+        lastUpdatedTimestamp = lastUpdatedTimestampObject.integerValue;
+    }
+    else {
+        NSLog(@"CtrlZ - ERROR - Expected dictionary from JSON object, unknown data structure found.");
     }
     
-    // Create new LocalizedString object if none found
-    if ( !string ) {
-        NSString *className = NSStringFromClass([LocalizedString class]);
-        NSString *entityName = nil;
-        for ( NSEntityDescription *entity in self.managedObjectModel.entities ) {
-            if ( [entity.managedObjectClassName isEqualToString:className] ) {
-                entityName = entity.name;
-                break;
+    return lastUpdatedTimestamp;
+}
+
++ (BOOL)saveTranslationsObject:(CRZTranslations *)translations
+{
+    NSString *translationsPlistPath = [CRZLocalizedStringService translationsFilePathForLanguageID:translations.languageID];
+    
+    if ( [[NSFileManager defaultManager] isWritableFileAtPath:translationsPlistPath] ) {
+        [translations.translationsDictionary writeToFile:translationsPlistPath atomically:YES];
+    }
+    
+    return [translations.translationsDictionary writeToFile:translationsPlistPath atomically:YES];
+}
+
++ (BOOL)clearExistingTranslations
+{
+    BOOL successful = NO;
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    
+    NSArray *savedTranslationsFiles = [fileManager contentsOfDirectoryAtPath:[self directoryPath]  error:&error];
+    
+    if ( !error ) {
+        successful = YES;
+        
+        for ( NSString *savedTranslationFilename in savedTranslationsFiles ) {
+            [fileManager removeItemAtPath:[[self directoryPath] stringByAppendingPathComponent:savedTranslationFilename] error:&error];
+            
+            if ( error ) {
+                successful = NO;
+                
+                NSLog(@"CtrlZ - ERROR - Removing file failed with error: %@", error);
             }
         }
-        string = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self.managedObjectContext];
-        string.key = key;
+    }
+    else {
+        NSLog(@"CtrlZ - ERROR - Reading contents of directory failed with error: %@", error);
     }
     
-    return string;
+    return successful;
 }
 
-// TODO: Modify the following constant and method depending on data source
-//static NSString *const kCTChangeableStringsLiveTextKeyBase = @"gsx$livetext";
+#pragma mark - Convenience Accessors
 
-- (NSDictionary *)localizedStringsFromJSONData:(NSData *)data
++ (NSInteger)existingTranslationsLastUpdatedTimestamp
 {
-    NSDictionary *localizedStringsDict = [[NSDictionary alloc] init];
-    
-    NSError *error = nil;
-    localizedStringsDict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-    if ( error ) {
-        NSLog(@"JSON Serialization failed with error: %@", error);
-    }
-    
-    return localizedStringsDict;
+    return [(NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:kCRZUserDefaultsLastUpdatedTimestampKey] integerValue];
 }
 
-- (void)saveStringsDict:(NSDictionary *)stringsDict
++ (void)saveExistingTranslationsLastUpdatedTimestamp:(NSInteger)lastUpdatedTimestamp
 {
-    for ( id stringKey in stringsDict ) {
-        // Convert key to string
-        NSString *shippedText;
-        if ( [stringKey isKindOfClass:[NSString class]] ) {
-            shippedText = (NSString *)stringKey;
-        }
-        
-        if ( shippedText.length ) {
-            // Fetch saved string that matches key found in payload.
-            LocalizedString *savedString = [self localizedStringObjectForKey:shippedText];
-            
-            NSDictionary *translationsDict = [stringsDict objectForKey:stringKey];
-            
-            for ( id languageIdKey in translationsDict ) {
-                // Convert key to string
-                NSString *languageId;
-                if ( [languageIdKey isKindOfClass:[NSString class]] ) {
-                    languageId = (NSString *)languageIdKey;
-                }
-                
-                NSString *translatedString = [[stringsDict objectForKey:stringKey] objectForKey:languageIdKey];
-                
-                if ( translatedString.length && ![shippedText isEqualToString:translatedString] ) {
-                    // Fetch saved translation for current language ID
-                    Translation *savedTranslation = [savedString translationForLanguageKey:languageId];
-                    
-                    // Create a new Translation object if none was found
-                    if ( !savedTranslation ) {
-                        NSString *className = NSStringFromClass([Translation class]);
-                        NSString *entityName = nil;
-                        for ( NSEntityDescription *entity in self.managedObjectModel.entities ) {
-                            if ( [entity.managedObjectClassName isEqualToString:className] ) {
-                                entityName = entity.name;
-                                break;
-                            }
-                        }
-                        savedTranslation = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:self.managedObjectContext];
-                        savedTranslation.languageID = languageId;
-                        [savedString addTranslationsObject:savedTranslation];
-                    }
-                    
-                    savedTranslation.value = translatedString;
-                    
-                    NSError *error;
-                    [self.managedObjectContext save:&error];
-                    if ( error ) {
-                        NSLog(@"Failed to save localized string with error: %@", error);
-                    }
-                }
-            }
-        }
-    }
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:lastUpdatedTimestamp] forKey:kCRZUserDefaultsLastUpdatedTimestampKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-#pragma mark - Bundle Resources
-
-- (NSBundle *)podBundle
++ (NSString *)translationsFilePathForLanguageID:(NSString *)languageID
 {
-    return [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:kCRZPodName withExtension:@"bundle"]];
+    NSString *crzDirectoryPath = [self directoryPath];
+    NSString *translationsPlistFilename = [NSString stringWithFormat:@"crz_%@.plist", languageID];
+    return [crzDirectoryPath stringByAppendingPathComponent:translationsPlistFilename];
 }
 
-#pragma mark - Core Data
-// Much of this code taken from RZVinyl ( https://github.com/Raizlabs/RZVinyl )
-
-- (NSURL *)storeURL
++ (NSString *)directoryPath
 {
-    if (_storeURL == nil) {
-        if ( [self.storeType isEqualToString:NSSQLiteStoreType] ) {
-            NSString *storeFileName = [kCRZPodName stringByAppendingPathExtension:@"sqlite"];
-            NSURL    *libraryDir = [[[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] lastObject];
-            _storeURL = [libraryDir URLByAppendingPathComponent:storeFileName];
-        }
+    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *directoryPath = [libraryPath stringByAppendingPathComponent:@"CtrlZ/"];
+    
+    // Only creates directory if it does not already exist.
+    BOOL success = [CRZLocalizedStringService createDirectoryWithPath:directoryPath];
+    
+    if ( !success ) {
+        directoryPath = nil;
     }
-    return _storeURL;
+    
+    return directoryPath;
 }
 
-- (BOOL)buildCoreDataStack
++ (BOOL)createDirectoryWithPath:(NSString *)directoryPath
 {
-    //
-    // Create model
-    //
-    if ( self.managedObjectModel == nil ) {
-        self.managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:[[self podBundle] URLForResource:kCRZPodName withExtension:@"momd"]];
-        if ( self.managedObjectModel == nil ) {
-            NSLog(@"Could not create managed object model for name %@", kCRZPodName);
-            return NO;
-        }
+    BOOL createdSuccessfully = NO;
+    
+    NSError *error;
+    [[NSFileManager defaultManager] createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error];
+    
+    if ( !error ) {
+        createdSuccessfully = YES;
+    }
+    else {
+        NSLog(@"CtrlZ - ERROR - Creating directory failed with error: %@", error);
     }
     
-    //
-    // Create PSC
-    //
-    NSError *error = nil;
-    if ( self.persistentStoreCoordinator == nil ) {
-        self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
-    }
-    
-    NSMutableDictionary *options = [NSMutableDictionary dictionary];
-    
-    if ( self.storeType == NSSQLiteStoreType ) {
-        NSAssert(self.storeURL != nil, @"Must have a store URL for SQLite stores");
-        if ( self.storeURL == nil ) {
-            return NO;
-        }
-        options[NSSQLitePragmasOption] = @{@"journal_mode" : @"WAL"};
-    }
-    
-    if ( self.storeURL ){
-        options[NSMigratePersistentStoresAutomaticallyOption] = @(YES);
-        options[NSInferMappingModelAutomaticallyOption] = @(YES);
-    }
-    
-    if( ![self.persistentStoreCoordinator addPersistentStoreWithType:self.storeType
-                                                       configuration:self.modelConfiguration
-                                                                 URL:self.storeURL
-                                                             options:options
-                                                               error:&error] ) {
-        
-        NSLog(@"Error creating/reading persistent store: %@", error);
-        
-        if ( self.storeURL ) {
-            
-            // Reset the error before we reuse it
-            error = nil;
-            
-            if ( [[NSFileManager defaultManager] removeItemAtURL:self.storeURL error:&error] ) {
-                
-                [self.persistentStoreCoordinator addPersistentStoreWithType:self.storeType
-                                                              configuration:self.modelConfiguration
-                                                                        URL:self.storeURL
-                                                                    options:options
-                                                                      error:&error];
-            }
-        }
-        
-        if ( error != nil ) {
-            @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                           reason:[NSString stringWithFormat:@"Unresolved error creating PSC for data stack: %@", error]
-                                         userInfo:nil];
-            return NO;
-        }
-    }
-    
-    //
-    // Create Context
-    //
-    self.managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    self.managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
-    
-    return YES;
+    return createdSuccessfully;
 }
 
 @end
