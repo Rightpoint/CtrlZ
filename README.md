@@ -5,6 +5,10 @@
 [![License](https://img.shields.io/cocoapods/l/CtrlZ.svg?style=flat)](http://cocoadocs.org/docsets/CtrlZ)
 [![Platform](https://img.shields.io/cocoapods/p/CtrlZ.svg?style=flat)](http://cocoadocs.org/docsets/CtrlZ)
 
+## Important Notice
+
+This repository is slated for deletion.  Please find other solutions.  
+
 ## Usage
 
 To run the example project, clone the repo, and open Example/Client/CtrlZ-Example.xcworkspace.
